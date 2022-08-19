@@ -37,12 +37,34 @@ mack_creek_lengths <- mack_creek_vertebrates %>%
   clean_names() %>% 
   select(year:sampledate) %>% 
   filter(section == "CC") %>% 
-  mutate(across(where(is.character, tolower))) %>% 
+  mutate(across(where(is.character), tolower)) %>% 
   drop_na(species) %>% 
   group_by(species) %>% 
   summarize(mean_length_cm = mean(length1, na.rm = TRUE),
             sd_length_cm = sd(length1, na.rm = TRUE)) %>% 
   ungroup()
+```
+
+
+create a REPREX for this problem 
+
+```{r}
+library(tidyverse)
+
+#make some data 
+fishies <- tribble(
+  ~fish_name, ~tail_size, 
+  "Redfish", 17, 
+  "Bluefish", 12, 
+  "Orangefish", 69
+)
+
+#I want to change the fish_name column to lower case only 
+
+fishies_lower <- fishies |> 
+  mutate(across(where(is.character, tolower)))
+
+#it gives an error here
 ```
 
 ### reprex 2
@@ -55,7 +77,7 @@ mack_creek_vertebrates %>%
   clean_names() %>% 
   filter(species == "ONCL") %>% 
   ggplot(aes(x = length1, y = weight)) +
-         geom_point(aes(shape = 12), color = "purple") +
+         geom_point(shape = 12, color = "purple") +
          theme_minimal() +
          labs(x = "Cutthroat trout length (cm)",
               y = "Weight (g)")
